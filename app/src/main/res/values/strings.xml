@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">GithubKu</string>
+    <string name="michael">Michael</string>
+    <string name="avatar">Avatar</string>
 </resources>
