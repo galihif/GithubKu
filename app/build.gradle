@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace 'com.giftech.githubku'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.giftech.githubku"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -35,6 +35,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildToolsVersion '33.0.0'
 }
 
 dependencies {
