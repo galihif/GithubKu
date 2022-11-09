@@ -3,6 +3,7 @@ package com.giftech.githubku.ui.detail
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.giftech.githubku.data.model.User
@@ -29,12 +30,31 @@ class DetailActivity : AppCompatActivity() {
 
     private fun getListRepo() {
         viewModel.listRepo.observe(this){
+            showLoading()
+            showEmpty()
+            showError()
             when(it){
-                is Resource.Error -> Log.d("TAG", "getListRepo: ${it.error}")
-                Resource.Loading -> Log.d("TAG", "getListRepo: Loading")
-                is Resource.Success -> repoAdapter.submitList(it.data)
+                is Resource.Error -> showError(true,it.error)
+                Resource.Loading -> showLoading(true)
+                is Resource.Success -> {
+                    repoAdapter.submitList(it.data)
+                    showEmpty(it.data.isEmpty())
+                }
             }
         }
+    }
+
+    private fun showEmpty(empty: Boolean=false) {
+        binding.empty.visibility = if (empty) View.VISIBLE else View.GONE
+    }
+
+    private fun showError(error: Boolean=false, errorMessage:String="") {
+        binding.error.visibility = if (error) View.VISIBLE else View.GONE
+        binding.errorMessage.text = errorMessage
+    }
+
+    private fun showLoading(loading: Boolean=false) {
+        binding.loading.visibility = if (loading) View.VISIBLE else View.GONE
     }
 
     private fun getDetailUser() {
