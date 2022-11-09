@@ -2,4 +2,5 @@
     <string name="app_name">GithubKu</string>
     <string name="michael">Michael</string>
     <string name="avatar">Avatar</string>
+    <string name="results_not_found_nplease_try_another_keyword">Results not found.\nPlease try another keyword</string>
 </resources>

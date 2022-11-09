@@ -3,11 +3,10 @@ package com.giftech.githubku.ui.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.giftech.githubku.databinding.ActivityHomeBinding
@@ -51,19 +50,35 @@ class HomeActivity : AppCompatActivity() {
 
     private fun getUsers() {
         viewModel.users.observe(this){
+            showEmpty()
+            showError()
+            showLoading()
             when(it){
                 is Resource.Error -> {
-                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                    showError(true,it.error)
                 }
                 Resource.Loading -> {
-                    Log.d("TAG", "getUsers: Loading")
+                    showLoading(true)
                 }
                 is Resource.Success -> {
+                    showEmpty(it.data.isEmpty())
                     userAdapter.submitList(it.data)
-                    Log.d("TAG", "getUsers: ${it.data.size}")
                 }
             }
         }
+    }
+
+    private fun showEmpty(empty: Boolean=false) {
+        binding.empty.visibility = if (empty) View.VISIBLE else View.GONE
+    }
+
+    private fun showError(error: Boolean=false, errorMessage:String="") {
+        binding.error.visibility = if (error) View.VISIBLE else View.GONE
+        binding.errorMessage.text = errorMessage
+    }
+
+    private fun showLoading(loading: Boolean=false) {
+        binding.loading.visibility = if (loading) View.VISIBLE else View.GONE
     }
 
     private fun setupAdapter() {
