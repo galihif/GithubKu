@@ -24,6 +24,17 @@ class DetailActivity : AppCompatActivity() {
         setupAdapter()
         getUsername()
         getDetailUser()
+        getListRepo()
+    }
+
+    private fun getListRepo() {
+        viewModel.listRepo.observe(this){
+            when(it){
+                is Resource.Error -> Log.d("TAG", "getListRepo: ${it.error}")
+                Resource.Loading -> Log.d("TAG", "getListRepo: Loading")
+                is Resource.Success -> repoAdapter.submitList(it.data)
+            }
+        }
     }
 
     private fun getDetailUser() {
