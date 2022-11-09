@@ -1,6 +1,7 @@
 package com.giftech.githubku.data.remote.network
 
 import com.giftech.githubku.data.remote.dto.DetailUserDto
+import com.giftech.githubku.data.remote.dto.RepoDto
 import com.giftech.githubku.data.remote.dto.SearchUserDto
 import com.giftech.githubku.utils.Constants
 import retrofit2.http.GET
@@ -19,4 +20,11 @@ interface ApiService {
         @Path("username") username:String,
         @Header("Authorization") token: String = Constants.ACCESS_TOKEN
     ):DetailUserDto
+
+    @GET("/users/{username}/repos")
+    suspend fun getListRepo(
+        @Path("username") username:String,
+    ):List<RepoDto>
+
+
 }

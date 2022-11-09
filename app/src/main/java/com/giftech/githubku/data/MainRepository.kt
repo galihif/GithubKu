@@ -1,6 +1,8 @@
 package com.giftech.githubku.data
 
+import com.giftech.githubku.data.model.Repo
 import com.giftech.githubku.data.model.User
+import com.giftech.githubku.data.remote.dto.toRepo
 import com.giftech.githubku.data.remote.dto.toUser
 import com.giftech.githubku.data.remote.network.ApiService
 import com.giftech.githubku.utils.Resource
@@ -40,6 +42,20 @@ class MainRepository @Inject constructor(
                 emit(Resource.Error(e.message ?: "Unexpected error occured"))
             }
         }.flowOn(Dispatchers.IO)
+
+    fun getListRepo(username:String):Flow<Resource<List<Repo>>> =
+        flow {
+            emit(Resource.Loading)
+            try {
+                val res = api.getListRepo(username).map { it.toRepo() }
+                emit(Resource.Success(res))
+            } catch (e: HttpException) {
+                emit(Resource.Error(e.message() ?: "Unexpected error occured"))
+            } catch (e: IOException) {
+                emit(Resource.Error(e.message ?: "Unexpected error occured"))
+            }
+        }.flowOn(Dispatchers.IO)
+
 
 
 }
