@@ -5,6 +5,10 @@ plugins {
     id 'com.google.dagger.hilt.android'
 }
 
+def apikeyPropertiesFile = rootProject.file("local.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
 android {
     namespace 'com.giftech.githubku'
     compileSdk 33
@@ -15,6 +19,7 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
+        buildConfigField("String", "ACCESS_TOKEN", apikeyProperties['ACCESS_TOKEN'])
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
