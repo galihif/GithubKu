@@ -1,6 +1,7 @@
 package com.giftech.githubku.ui.home
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.EditorInfo
@@ -11,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.giftech.githubku.databinding.ActivityHomeBinding
 import com.giftech.githubku.ui.adapter.UserAdapter
+import com.giftech.githubku.ui.detail.DetailActivity
 import com.giftech.githubku.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -66,7 +68,9 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setupAdapter() {
         userAdapter = UserAdapter {
-
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra(DetailActivity.USERNAME, it.username)
+            startActivity(intent)
         }
         binding.rvUsers.adapter = userAdapter
     }

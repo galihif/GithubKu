@@ -17,6 +17,7 @@ class UserAdapter(
         fun bind(item: User){
             binding.tvName.text = item.username
             binding.ivAvatar.loadImage(item.avatar)
+            itemView.setOnClickListener { onClickItem(item) }
         }
     }
 
