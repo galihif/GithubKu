@@ -27,4 +27,19 @@ class MainRepository @Inject constructor(
                 emit(Resource.Error(e.message ?: "Unexpected error occured"))
             }
         }.flowOn(Dispatchers.IO)
+
+    fun getDetailUser(username:String):Flow<Resource<User>> =
+        flow {
+            emit(Resource.Loading)
+            try {
+                val res = api.getDetailUser(username).toUser()
+                emit(Resource.Success(res))
+            } catch (e: HttpException) {
+                emit(Resource.Error(e.message() ?: "Unexpected error occured"))
+            } catch (e: IOException) {
+                emit(Resource.Error(e.message ?: "Unexpected error occured"))
+            }
+        }.flowOn(Dispatchers.IO)
+
+
 }
