@@ -1,7 +1,11 @@
 package com.giftech.githubku.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +25,26 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupAdapter()
         getUsers()
+        searchUser()
+    }
+
+    private fun searchUser() {
+        binding.etSearch.setOnEditorActionListener(TextView.OnEditorActionListener { textView, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val keyword = textView.text.toString()
+                viewModel.setQuery(keyword)
+                hideKeyboard()
+                return@OnEditorActionListener true
+            }
+            false
+        })
+    }
+
+    private fun hideKeyboard() {
+        binding.etSearch.clearFocus()
+        val imn: InputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imn.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)
     }
 
     private fun getUsers() {
