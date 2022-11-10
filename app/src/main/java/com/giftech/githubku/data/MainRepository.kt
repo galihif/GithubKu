@@ -5,6 +5,7 @@ import com.giftech.githubku.data.model.User
 import com.giftech.githubku.data.remote.dto.toRepo
 import com.giftech.githubku.data.remote.dto.toUser
 import com.giftech.githubku.data.remote.network.ApiService
+import com.giftech.githubku.utils.EspressoIdlingResource
 import com.giftech.githubku.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -45,13 +46,17 @@ class MainRepository @Inject constructor(
 
     fun getListRepo(username:String):Flow<Resource<List<Repo>>> =
         flow {
+            EspressoIdlingResource.increment()
             emit(Resource.Loading)
             try {
                 val res = api.getListRepo(username).map { it.toRepo() }
                 emit(Resource.Success(res))
+                EspressoIdlingResource.decrement()
             } catch (e: HttpException) {
+                EspressoIdlingResource.decrement()
                 emit(Resource.Error(e.message() ?: "Unexpected error occured"))
             } catch (e: IOException) {
+                EspressoIdlingResource.decrement()
                 emit(Resource.Error(e.message ?: "Unexpected error occured"))
             }
         }.flowOn(Dispatchers.IO)
