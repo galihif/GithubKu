@@ -17,6 +17,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
+import kotlin.math.exp
 
 
 @RunWith(MockitoJUnitRunner::class)
@@ -37,13 +38,16 @@ class HomeViewModelTest {
         val dummyData = Resource.Success(Dummy.dummyUser())
         val expectedUsers = MutableLiveData<Resource<List<User>>>()
         expectedUsers.value = dummyData
+
         `when`(viewModel.users).thenReturn(expectedUsers)
 
         val actualUsers = viewModel.users.getOrAwaitValue()
 
-        verify(viewModel).users
-        assertNotNull(actualUsers)
-
+        if (actualUsers is Resource.Success){
+            verify(viewModel).users
+            assertNotNull(actualUsers.data)
+            assertEquals(dummyData.data.size, actualUsers.data.size)
+        }
     }
 
 }
